@@ -7,14 +7,19 @@ import ParticlesBg from 'particles-bg';
 import './App.css';
 import { useState } from 'react';
 
+// EXAMPLE IMAGE URL: 'https://samples.clarifai.com/metro-north.jpg';
+
 const App = () => {
   const [input, setInput] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
 
   const onInputChange = e => {
-    console.log(e.target.value);
+    setInput(e.target.value);
   };
 
   const onSubmit = () => {
+    setImageUrl(input);
+
     const raw = JSON.stringify({
       user_app_id: {
         user_id: USER_ID,
@@ -24,7 +29,7 @@ const App = () => {
         {
           data: {
             image: {
-              url: IMAGE_URL,
+              url: input,
             },
           },
         },
@@ -41,16 +46,15 @@ const App = () => {
     };
 
     fetch(
-      'https://api.clarifai.com/v2/models/' +
-        MODEL_ID +
-        '/versions/' +
-        MODEL_VERSION_ID +
-        '/outputs',
+      `https://api.clarifai.com/v2/models/${MODEL_ID}/versions/${MODEL_VERSION_ID}/outputs`,
       requestOptions
     )
       .then(response => response.json())
       .then(result => {
-        console.log('result ->', result);
+        console.log(
+          'result ->',
+          result.outputs[0].data.regions[0].region_info.bounding_box
+        );
       })
       .catch(error => console.log('error', error));
   };
@@ -62,7 +66,7 @@ const App = () => {
       <Logo />
       <Rank />
       <ImageLinkForm onInputChange={onInputChange} onButtonSubmit={onSubmit} />
-      <FaceRecognition />
+      <FaceRecognition imageUrl={imageUrl} />
     </div>
   );
 };

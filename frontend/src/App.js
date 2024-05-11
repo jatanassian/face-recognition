@@ -2,6 +2,7 @@ import Navigation from './components/navigation/Navigation';
 import Logo from './components/logo/Logo';
 import ImageLinkForm from './components/image-link-form/ImageLinkForm';
 import Rank from './components/rank/Rank';
+import SignIn from './components/sign-in/SignIn';
 import FaceRecognition from './components/face-recognition/FaceRecognition';
 import ParticlesBg from 'particles-bg';
 import './App.css';
@@ -13,6 +14,7 @@ const App = () => {
   const [input, setInput] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [box, setBox] = useState({});
+  const [route, setRoute] = useState('sign-in');
 
   const calculateFaceLocation = data => {
     const faceArea = data.outputs[0].data.regions[0].region_info.bounding_box;
@@ -75,14 +77,27 @@ const App = () => {
       .catch(error => console.log('error', error));
   };
 
+  const onRouteChange = route => {
+    setRoute(route);
+  };
+
   return (
     <div className='App'>
       <ParticlesBg type='cobweb' bg={true} color='#f5f5f5' num={200} />
-      <Navigation />
-      <Logo />
-      <Rank />
-      <ImageLinkForm onInputChange={onInputChange} onButtonSubmit={onSubmit} />
-      <FaceRecognition imageUrl={imageUrl} box={box} />
+      <Navigation onRouteChange={onRouteChange} />
+      {route === 'sign-in' ? (
+        <SignIn onRouteChange={onRouteChange} />
+      ) : (
+        <>
+          <Logo />
+          <Rank />
+          <ImageLinkForm
+            onInputChange={onInputChange}
+            onButtonSubmit={onSubmit}
+          />
+          <FaceRecognition imageUrl={imageUrl} box={box} />
+        </>
+      )}
     </div>
   );
 };

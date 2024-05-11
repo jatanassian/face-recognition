@@ -12,6 +12,27 @@ import { useState } from 'react';
 const App = () => {
   const [input, setInput] = useState('');
   const [imageUrl, setImageUrl] = useState('');
+  const [box, setBox] = useState({});
+
+  const calculateFaceLocation = data => {
+    const faceArea = data.outputs[0].data.regions[0].region_info.bounding_box;
+    console.log(faceArea);
+
+    const image = document.getElementById('input-image');
+    const width = Number(image.width);
+    const height = Number(image.height);
+
+    return {
+      left: faceArea.left_col * width,
+      top: faceArea.top_row * height,
+      right: width - faceArea.right_col * width,
+      bottom: height - faceArea.bottom_row * height,
+    };
+  };
+
+  const displayFaceBox = box => {
+    setBox(box);
+  };
 
   const onInputChange = e => {
     setInput(e.target.value);
@@ -50,12 +71,7 @@ const App = () => {
       requestOptions
     )
       .then(response => response.json())
-      .then(result => {
-        console.log(
-          'result ->',
-          result.outputs[0].data.regions[0].region_info.bounding_box
-        );
-      })
+      .then(result => displayFaceBox(calculateFaceLocation(result)))
       .catch(error => console.log('error', error));
   };
 
@@ -66,7 +82,7 @@ const App = () => {
       <Logo />
       <Rank />
       <ImageLinkForm onInputChange={onInputChange} onButtonSubmit={onSubmit} />
-      <FaceRecognition imageUrl={imageUrl} />
+      <FaceRecognition imageUrl={imageUrl} box={box} />
     </div>
   );
 };

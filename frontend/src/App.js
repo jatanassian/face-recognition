@@ -3,6 +3,7 @@ import Logo from './components/logo/Logo';
 import ImageLinkForm from './components/image-link-form/ImageLinkForm';
 import Rank from './components/rank/Rank';
 import SignIn from './components/sign-in/SignIn';
+import Register from './components/register/Register';
 import FaceRecognition from './components/face-recognition/FaceRecognition';
 import ParticlesBg from 'particles-bg';
 import './App.css';
@@ -85,9 +86,7 @@ const App = () => {
     <div className='App'>
       <ParticlesBg type='cobweb' bg={true} color='#f5f5f5' num={200} />
       <Navigation onRouteChange={onRouteChange} />
-      {route === 'sign-in' ? (
-        <SignIn onRouteChange={onRouteChange} />
-      ) : (
+      {route === 'home' ? (
         <>
           <Logo />
           <Rank />
@@ -97,6 +96,10 @@ const App = () => {
           />
           <FaceRecognition imageUrl={imageUrl} box={box} />
         </>
+      ) : route === 'sign-in' ? (
+        <SignIn onRouteChange={onRouteChange} />
+      ) : (
+        <Register onRouteChange={onRouteChange} />
       )}
     </div>
   );

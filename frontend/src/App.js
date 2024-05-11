@@ -16,6 +16,7 @@ const App = () => {
   const [imageUrl, setImageUrl] = useState('');
   const [box, setBox] = useState({});
   const [route, setRoute] = useState('sign-in');
+  const [isSignedIn, setIsSignedIn] = useState(false);
 
   const calculateFaceLocation = data => {
     const faceArea = data.outputs[0].data.regions[0].region_info.bounding_box;
@@ -79,13 +80,18 @@ const App = () => {
   };
 
   const onRouteChange = route => {
+    if (route === 'sign-out') {
+      setIsSignedIn(false);
+    } else if (route === 'home') {
+      setIsSignedIn(true);
+    }
     setRoute(route);
   };
 
   return (
     <div className='App'>
       <ParticlesBg type='cobweb' bg={true} color='#f5f5f5' num={200} />
-      <Navigation onRouteChange={onRouteChange} />
+      <Navigation onRouteChange={onRouteChange} isSignedIn={isSignedIn} />
       {route === 'home' ? (
         <>
           <Logo />

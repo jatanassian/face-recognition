@@ -56,6 +56,25 @@ app.post('/register', (req, res) => {
   res.json(database.users.at(-1));
 });
 
+app.get('/profile/:id', (req, res) => {
+  const { id } = req.params;
+
+  const user = database.users.find(user => user.id === id);
+  if (!user) {
+    return res.status(404).json('This user does not exist');
+  }
+  res.json(user);
+});
+
+app.post('/image', (req, res) => {
+  const user = database.users.find(user => user.id === req.body.id);
+  if (!user) {
+    return res.status(404).json('This user does not exist');
+  }
+  user.entries++;
+  res.json(user.entries);
+});
+
 app.listen(PORT, () => {
   console.log(`App is running on port ${PORT}`);
 });

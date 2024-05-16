@@ -78,11 +78,3 @@ app.post('/image', (req, res) => {
 app.listen(PORT, () => {
   console.log(`App is running on port ${PORT}`);
 });
-
-/**
- * / => res = this is working
- * /sign-in => POST = success/fail (user?)
- * /register => POST = user
- * /profile/:userId => GET = user
- * /image => PUT = user
- */

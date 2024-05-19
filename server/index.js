@@ -1,9 +1,11 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
+const cors = require('cors');
 
 const app = express();
 app.use(bodyParser.json());
+app.use(cors());
 
 const PORT = 3000;
 
@@ -41,7 +43,7 @@ app.post('/sign-in', async (req, res) => {
       password,
       '$2b$10$/xDQNoeSuw4P8P.7vdtPUOF8w1Yu1ne7wKVKwd7GwwdOAesKPXssa' // 'test'
     );
-    console.log('passwordMatch ->', passwordMatch);
+
     if (passwordMatch) {
       return res.json('Success');
     }

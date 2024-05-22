@@ -81,7 +81,18 @@ const App = () => {
       requestOptions
     )
       .then(response => response.json())
-      .then(result => displayFaceBox(calculateFaceLocation(result)))
+      .then(result => {
+        if (result) {
+          fetch('http://localhost:3000/image', {
+            method: 'put',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: user.id }),
+          })
+            .then(res => res.json())
+            .then(count => setUser({ ...user, entries: count }));
+        }
+        displayFaceBox(calculateFaceLocation(result));
+      })
       .catch(error => console.log('error', error));
   };
 

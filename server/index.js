@@ -77,7 +77,7 @@ app.get('/profile/:id', (req, res) => {
   res.json(user);
 });
 
-app.post('/image', (req, res) => {
+app.put('/image', (req, res) => {
   const user = database.users.find(user => user.id === req.body.id);
   if (!user) {
     return res.status(404).json('This user does not exist');

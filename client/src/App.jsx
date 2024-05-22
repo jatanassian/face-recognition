@@ -101,7 +101,7 @@ const App = () => {
       {route === 'home' ? (
         <>
           <Logo />
-          <Rank />
+          <Rank name={user.name} entries={user.entries} />
           <ImageLinkForm
             onInputChange={onInputChange}
             onButtonSubmit={onSubmit}
@@ -109,7 +109,7 @@ const App = () => {
           <FaceRecognition imageUrl={imageUrl} box={box} />
         </>
       ) : route === 'sign-in' ? (
-        <SignIn onRouteChange={onRouteChange} />
+        <SignIn onRouteChange={onRouteChange} setUser={setUser} />
       ) : (
         <Register onRouteChange={onRouteChange} setUser={setUser} />
       )}

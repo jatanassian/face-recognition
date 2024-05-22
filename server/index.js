@@ -45,7 +45,7 @@ app.post('/sign-in', async (req, res) => {
     );
 
     if (passwordMatch) {
-      return res.json('Success');
+      return res.json(database.users[0]);
     }
     return res.status(400).json('Error logging in');
   }

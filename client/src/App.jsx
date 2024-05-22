@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import Navigation from './components/navigation/Navigation';
 import Logo from './components/logo/Logo';
 import ImageLinkForm from './components/image-link-form/ImageLinkForm';
@@ -7,7 +8,6 @@ import Register from './components/register/Register';
 import FaceRecognition from './components/face-recognition/FaceRecognition';
 import ParticlesBg from 'particles-bg';
 import './App.css';
-import { useState } from 'react';
 
 // EXAMPLE IMAGE URL: 'https://samples.clarifai.com/metro-north.jpg';
 
@@ -17,6 +17,13 @@ const App = () => {
   const [box, setBox] = useState({});
   const [route, setRoute] = useState('sign-in');
   const [isSignedIn, setIsSignedIn] = useState(false);
+  const [user, setUser] = useState({
+    id: '',
+    name: '',
+    email: '',
+    entries: 0,
+    joined: '',
+  });
 
   const calculateFaceLocation = data => {
     const faceArea = data.outputs[0].data.regions[0].region_info.bounding_box;
@@ -104,7 +111,7 @@ const App = () => {
       ) : route === 'sign-in' ? (
         <SignIn onRouteChange={onRouteChange} />
       ) : (
-        <Register onRouteChange={onRouteChange} />
+        <Register onRouteChange={onRouteChange} setUser={setUser} />
       )}
     </div>
   );

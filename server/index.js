@@ -81,11 +81,15 @@ app.post('/register', (req, res) => {
 app.get('/profile/:id', (req, res) => {
   const { id } = req.params;
 
-  const user = database.users.find(user => user.id === id);
-  if (!user) {
-    return res.status(404).json('This user does not exist');
-  }
-  res.json(user);
+  db('users')
+    .select('*')
+    .where({ id })
+    .then(users => {
+      if (users.length) {
+        return res.json(users[0]);
+      }
+      res.status(404).json('This user does not exist');
+    });
 });
 
 app.put('/image', (req, res) => {

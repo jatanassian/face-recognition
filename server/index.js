@@ -93,12 +93,12 @@ app.get('/profile/:id', (req, res) => {
 });
 
 app.put('/image', (req, res) => {
-  const user = database.users.find(user => user.id === req.body.id);
-  if (!user) {
-    return res.status(404).json('This user does not exist');
-  }
-  user.entries++;
-  res.json(user.entries);
+  db('users')
+    .where('id', req.body.id)
+    .increment('entries', 1)
+    .returning('entries')
+    .then(user => res.json(user[0].entries))
+    .catch(() => res.status(400).json('Unable do get entries'));
 });
 
 app.listen(PORT, () => {

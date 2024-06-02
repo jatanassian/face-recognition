@@ -20,47 +20,30 @@ app.use(cors());
 
 const PORT = 3000;
 
-// Mock database - to remove once DB implemented
-const database = {
-  users: [
-    {
-      id: '123',
-      name: 'John',
-      email: 'john@gmail.com',
-      password: '$2b$10$/xDQNoeSuw4P8P.7vdtPUOF8w1Yu1ne7wKVKwd7GwwdOAesKPXssa',
-      entries: 0,
-      joined: new Date(),
-    },
-    {
-      id: '456',
-      name: 'Jack',
-      email: 'jack@gmail.com',
-      password: 'jack',
-      entries: 0,
-      joined: new Date(),
-    },
-  ],
-};
-
-app.get('/', (req, res) => {
-  res.json(database.users);
-});
-
 app.post('/sign-in', async (req, res) => {
   const { email, password } = req.body;
 
-  if (email && password) {
-    const passwordMatch = await bcrypt.compare(
-      password,
-      '$2b$10$/xDQNoeSuw4P8P.7vdtPUOF8w1Yu1ne7wKVKwd7GwwdOAesKPXssa' // 'test'
-    );
-
-    if (passwordMatch) {
-      return res.json(database.users[0]);
-    }
+  if (!email || !password) {
     return res.status(400).json('Error logging in');
   }
-  res.status(400).json('Error logging in');
+
+  db.select('email', 'hash')
+    .from('login')
+    .where({ email })
+    .then(async data => {
+      const user = data[0];
+      const isPasswordValid = await bcrypt.compare(password, user.hash);
+      if (!isPasswordValid) {
+        return res.status(400).json('Error logging in');
+      }
+      return db
+        .select('*')
+        .from('users')
+        .where({ email })
+        .then(users => res.json(users[0]))
+        .catch(() => res.status(400).json('Error logging in'));
+    })
+    .catch(() => res.status(400).json('Error logging in'));
 });
 
 app.post('/register', (req, res) => {

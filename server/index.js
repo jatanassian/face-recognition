@@ -65,16 +65,28 @@ app.post('/sign-in', async (req, res) => {
 
 app.post('/register', (req, res) => {
   const { email, password, name } = req.body;
-  bcrypt.hash(password, 10).then(hash => {
-    db('users')
-      .returning('*')
-      .insert({
-        name,
-        email,
-        joined: new Date(),
-      })
-      .then(user => res.json(user[0]))
-      .catch(() => res.status(400).json('Unable to register'));
+  bcrypt.hash(password, 10).then(hashedPassword => {
+    db.transaction(transaction => {
+      // Insert into login table
+      transaction('login')
+        .insert({
+          hash: hashedPassword,
+          email,
+        })
+        .then(() => {
+          // Insert into users table
+          transaction('users')
+            .returning('*')
+            .insert({
+              name,
+              email,
+              joined: new Date(),
+            })
+            .then(user => res.json(user[0]));
+        })
+        .then(transaction.commit)
+        .catch(transaction.rollback);
+    }).catch(() => res.status(400).json('Unable to register'));
   });
 });
 

@@ -10,8 +10,8 @@ const db = knex({
     host: '127.0.0.1',
     user: 'YOUR_USER',
     password: 'YOUR_PASSWORD',
-    database: 'YOUR_DB_NAME',
-  },
+    database: 'YOUR_DB_NAME'
+  }
 });
 
 const app = express();
@@ -54,7 +54,7 @@ app.post('/register', (req, res) => {
       transaction('login')
         .insert({
           hash: hashedPassword,
-          email,
+          email
         })
         .then(() => {
           // Insert into users table
@@ -63,7 +63,7 @@ app.post('/register', (req, res) => {
             .insert({
               name,
               email,
-              joined: new Date(),
+              joined: new Date()
             })
             .then(user => res.json(user[0]));
         })

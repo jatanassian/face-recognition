@@ -22,7 +22,7 @@ const App = () => {
     name: '',
     email: '',
     entries: 0,
-    joined: '',
+    joined: ''
   });
 
   const calculateFaceLocation = data => {
@@ -36,7 +36,7 @@ const App = () => {
       left: faceArea.left_col * width,
       top: faceArea.top_row * height,
       right: width - faceArea.right_col * width,
-      bottom: height - faceArea.bottom_row * height,
+      bottom: height - faceArea.bottom_row * height
     };
   };
 
@@ -54,26 +54,26 @@ const App = () => {
     const raw = JSON.stringify({
       user_app_id: {
         user_id: USER_ID,
-        app_id: APP_ID,
+        app_id: APP_ID
       },
       inputs: [
         {
           data: {
             image: {
-              url: input,
-            },
-          },
-        },
-      ],
+              url: input
+            }
+          }
+        }
+      ]
     });
 
     const requestOptions = {
       method: 'POST',
       headers: {
         Accept: 'application/json',
-        Authorization: 'Key ' + PAT,
+        Authorization: 'Key ' + PAT
       },
-      body: raw,
+      body: raw
     };
 
     fetch(
@@ -86,7 +86,7 @@ const App = () => {
           fetch('http://localhost:3000/image', {
             method: 'put',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ id: user.id }),
+            body: JSON.stringify({ id: user.id })
           })
             .then(res => res.json())
             .then(count => setUser({ ...user, entries: count }));
@@ -98,7 +98,18 @@ const App = () => {
 
   const onRouteChange = route => {
     if (route === 'sign-out') {
+      setUser({
+        id: '',
+        name: '',
+        email: '',
+        entries: 0,
+        joined: ''
+      });
       setIsSignedIn(false);
+      setBox({});
+      setInput('');
+      setImageUrl('');
+      setRoute('sign-in');
     } else if (route === 'home') {
       setIsSignedIn(true);
     }
@@ -113,10 +124,7 @@ const App = () => {
         <>
           <Logo />
           <Rank name={user.name} entries={user.entries} />
-          <ImageLinkForm
-            onInputChange={onInputChange}
-            onButtonSubmit={onSubmit}
-          />
+          <ImageLinkForm onInputChange={onInputChange} onButtonSubmit={onSubmit} />
           <FaceRecognition imageUrl={imageUrl} box={box} />
         </>
       ) : route === 'sign-in' ? (

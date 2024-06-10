@@ -21,12 +21,11 @@ const Register = ({ onRouteChange, setUser }) => {
     fetch('http://localhost:3000/register', {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email, password }),
+      body: JSON.stringify({ name, email, password })
     })
       .then(res => res.json())
       .then(user => {
-        console.log(user);
-        if (user) {
+        if (user.id) {
           setUser(user);
           onRouteChange('home');
         }

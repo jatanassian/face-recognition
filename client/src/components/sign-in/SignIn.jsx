@@ -16,7 +16,7 @@ const SignIn = ({ onRouteChange, setUser }) => {
     fetch('http://localhost:3000/sign-in', {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ email, password })
     })
       .then(res => res.json())
       .then(user => {
@@ -77,10 +77,7 @@ const SignIn = ({ onRouteChange, setUser }) => {
 
           {/* Register redirect */}
           <div className='lh-copy mt3'>
-            <p
-              className='f6 link dim black db pointer'
-              onClick={() => onRouteChange('register')}
-            >
+            <p className='f6 link dim black db pointer' onClick={() => onRouteChange('register')}>
               Register
             </p>
           </div>

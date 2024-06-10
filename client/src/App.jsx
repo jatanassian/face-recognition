@@ -89,7 +89,8 @@ const App = () => {
             body: JSON.stringify({ id: user.id })
           })
             .then(res => res.json())
-            .then(count => setUser({ ...user, entries: count }));
+            .then(count => setUser({ ...user, entries: count }))
+            .catch(console.log);
         }
         displayFaceBox(calculateFaceLocation(result));
       })

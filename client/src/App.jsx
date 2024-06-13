@@ -10,6 +10,7 @@ import ParticlesBg from 'particles-bg';
 import './App.css';
 
 // EXAMPLE IMAGE URL: 'https://samples.clarifai.com/metro-north.jpg';
+// TODO: Handle multiple faces
 
 const App = () => {
   const [input, setInput] = useState('');
@@ -51,35 +52,11 @@ const App = () => {
   const onSubmit = () => {
     setImageUrl(input);
 
-    const raw = JSON.stringify({
-      user_app_id: {
-        user_id: USER_ID,
-        app_id: APP_ID
-      },
-      inputs: [
-        {
-          data: {
-            image: {
-              url: input
-            }
-          }
-        }
-      ]
-    });
-
-    const requestOptions = {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        Authorization: 'Key ' + PAT
-      },
-      body: raw
-    };
-
-    fetch(
-      `https://api.clarifai.com/v2/models/${MODEL_ID}/versions/${MODEL_VERSION_ID}/outputs`,
-      requestOptions
-    )
+    fetch('http://localhost:3000/image-url', {
+      method: 'post',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ input })
+    })
       .then(response => response.json())
       .then(result => {
         if (result) {

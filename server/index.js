@@ -26,12 +26,10 @@ app.use(cors());
 const PORT = 3000;
 
 app.post('/sign-in', (req, res) => signin.handleSignIn(req, res, db, bcrypt));
-
 app.post('/register', (req, res) => register.handleRegister(req, res, db, bcrypt));
-
 app.get('/profile/:id', (req, res) => profile.getProfile(req, res, db));
-
 app.put('/image', (req, res) => image.handleImage(req, res, db));
+app.post('/image-url', (req, res) => image.handleApiCall(req, res));
 
 app.listen(PORT, () => {
   console.log(`App is running on port ${PORT}`);

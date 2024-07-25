@@ -1,8 +1,8 @@
 const handleApiCall = (req, res) => {
   const raw = JSON.stringify({
     user_app_id: {
-      user_id: USER_ID,
-      app_id: APP_ID
+      user_id: process.env.CLARIFAI_USER_ID,
+      app_id: process.env.CLARIFAI_APP_ID
     },
     inputs: [
       {
@@ -19,13 +19,13 @@ const handleApiCall = (req, res) => {
     method: 'POST',
     headers: {
       Accept: 'application/json',
-      Authorization: 'Key ' + PAT
+      Authorization: 'Key ' + process.env.CLARIFAI_PAT
     },
     body: raw
   };
 
   fetch(
-    `https://api.clarifai.com/v2/models/${MODEL_ID}/versions/${MODEL_VERSION_ID}/outputs`,
+    'https://api.clarifai.com/v2/models/face-detection/versions/6dc7e46bc9124c5c8824be4822abe105/outputs',
     requestOptions
   )
     .then(response => response.json())

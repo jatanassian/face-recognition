@@ -10,11 +10,11 @@ const handleSignIn = async (req, res, db, bcrypt) => {
     .from('users')
     .where({ email })
     .then(userData => {
-      const { id, ...user } = userData[0];
+      const user = userData[0];
       return db
         .select('hash')
         .from('logins')
-        .where({ user_id: id })
+        .where({ user_id: user.id })
         .then(async loginData => {
           const login = loginData[0];
           const isPasswordValid = await bcrypt.compare(password, login.hash);

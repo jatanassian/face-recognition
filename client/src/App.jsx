@@ -15,7 +15,7 @@ import './App.css';
 const App = () => {
   const [input, setInput] = useState('');
   const [imageUrl, setImageUrl] = useState('');
-  const [box, setBox] = useState({});
+  const [box, setBox] = useState([]);
   const [route, setRoute] = useState('sign-in');
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [user, setUser] = useState({
@@ -27,18 +27,22 @@ const App = () => {
   });
 
   const calculateFaceLocation = data => {
-    const faceArea = data.outputs[0].data.regions[0].region_info.bounding_box;
-
+    const output = [];
     const image = document.getElementById('input-image');
     const width = Number(image.width);
     const height = Number(image.height);
 
-    return {
-      left: faceArea.left_col * width,
-      top: faceArea.top_row * height,
-      right: width - faceArea.right_col * width,
-      bottom: height - faceArea.bottom_row * height
-    };
+    data.outputs[0].data.regions.forEach(region => {
+      const faceArea = region.region_info.bounding_box;
+      output.push({
+        left: faceArea.left_col * width,
+        top: faceArea.top_row * height,
+        right: width - faceArea.right_col * width,
+        bottom: height - faceArea.bottom_row * height
+      });
+    });
+
+    return output;
   };
 
   const displayFaceBox = box => {

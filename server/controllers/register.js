@@ -5,22 +5,22 @@ const handleRegister = (req, res, db, bcrypt) => {
   }
   bcrypt.hash(password, 10).then(hashedPassword => {
     db.transaction(transaction => {
-      // Insert into login table
-      transaction('login')
+      // Insert into users table
+      transaction('users')
+        .returning('*')
         .insert({
-          hash: hashedPassword,
-          email
+          name,
+          email,
+          created_at: new Date()
         })
-        .then(() => {
-          // Insert into users table
-          transaction('users')
-            .returning('*')
+        .then(user => {
+          // Insert into login table
+          transaction('logins')
             .insert({
-              name,
-              email,
-              joined: new Date()
+              hash: hashedPassword,
+              user_id: user[0].id
             })
-            .then(user => res.json(user[0]));
+            .then(() => res.json(user[0]));
         })
         .then(transaction.commit)
         .catch(transaction.rollback);

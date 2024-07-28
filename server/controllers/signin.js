@@ -5,20 +5,24 @@ const handleSignIn = async (req, res, db, bcrypt) => {
     return res.status(400).json('Error logging in');
   }
 
-  db.select('email', 'hash')
-    .from('login')
+  // Get user's id by email, then use user id to get login by user_id
+  db.select('*')
+    .from('users')
     .where({ email })
-    .then(async data => {
-      const user = data[0];
-      const isPasswordValid = await bcrypt.compare(password, user.hash);
-      if (!isPasswordValid) {
-        return res.status(400).json('Error logging in');
-      }
+    .then(userData => {
+      const { id, ...user } = userData[0];
       return db
-        .select('*')
-        .from('users')
-        .where({ email })
-        .then(users => res.json(users[0]))
+        .select('hash')
+        .from('logins')
+        .where({ user_id: id })
+        .then(async loginData => {
+          const login = loginData[0];
+          const isPasswordValid = await bcrypt.compare(password, login.hash);
+          if (!isPasswordValid) {
+            return res.status(400).json('Error logging in');
+          }
+          return res.json(user);
+        })
         .catch(() => res.status(400).json('Error logging in'));
     })
     .catch(() => res.status(400).json('Error logging in'));

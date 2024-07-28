@@ -23,7 +23,7 @@ const App = () => {
     name: '',
     email: '',
     entries: 0,
-    joined: ''
+    created_at: ''
   });
 
   const calculateFaceLocation = data => {
@@ -81,7 +81,7 @@ const App = () => {
         name: '',
         email: '',
         entries: 0,
-        joined: ''
+        created_at: ''
       });
       setIsSignedIn(false);
       setBox({});

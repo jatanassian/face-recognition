@@ -10,7 +10,6 @@ import ParticlesBg from 'particles-bg';
 import './App.css';
 
 // EXAMPLE IMAGE URL: 'https://samples.clarifai.com/metro-north.jpg';
-// TODO: Handle multiple faces
 
 const App = () => {
   const [input, setInput] = useState('');

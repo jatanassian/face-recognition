@@ -55,7 +55,7 @@ const App = () => {
   const onSubmit = () => {
     setImageUrl(input);
 
-    fetch('http://localhost:3000/image-url', {
+    fetch(`${import.meta.env.VITE_API_URL}/image-url`, {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ input })
@@ -63,7 +63,7 @@ const App = () => {
       .then(response => response.json())
       .then(result => {
         if (result) {
-          fetch('http://localhost:3000/image', {
+          fetch(`${import.meta.env.VITE_API_URL}/image`, {
             method: 'put',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ id: user.id })
